@@ -272,6 +272,7 @@ spec:
             --metrics --pprof --pprof.addr {{ .Values.node.goquorum.metrics.pprofaddr | quote }} --pprof.port {{ .Values.node.goquorum.metrics.pprofport }} \
             --networkid {{ .Values.node.goquorum.networkId }} \
             --port {{ .Values.node.goquorum.p2p.port }} \
+            --gcmode {{ .Values.node.goquorum.gcmode }} \
           {{- if .Values.node.goquorum.rpc.enabled }}
             --http --http.addr {{ .Values.node.goquorum.rpc.addr }} --http.port {{ .Values.node.goquorum.rpc.port }} --http.corsdomain {{ .Values.node.goquorum.rpc.corsDomain | quote }} --http.vhosts {{ .Values.node.goquorum.rpc.vHosts | quote }} --http.api {{ .Values.node.goquorum.rpc.api | quote }} \
           {{- end }}
@@ -283,6 +284,16 @@ spec:
           {{- end }}          
           {{- if hasKey .Values.node.goquorum.account "unlock" }}
              --unlock {{ .Values.node.goquorum.account.unlock }} --allow-insecure-unlock --password {{ .Values.node.goquorum.account.passwordPath }} \
+          {{- end }}
+          {{- if .Values.node.goquorum.txpool }}
+            {{- if .Values.node.goquorum.txpool.globalslots }}
+              {{- if .Values.node.goquorum.txpool.globalslots }}
+            --txpool.globalslots {{ .Values.node.goquorum.txpool.globalslots }} \
+              {{- end }}
+              {{- if .Values.node.goquorum.txpool.globalqueue }}
+            --txpool.globalqueue {{ .Values.node.goquorum.txpool.globalqueue }} \
+              {{- end }}
+            {{- end }}
           {{- end }}
 
         livenessProbe:

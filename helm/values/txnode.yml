@@ -1,8 +1,8 @@
 ---
 
 quorumFlags:
-  privacy: true
-  removeKeysOnDelete: true
+  privacy: false
+  removeKeysOnDelete: false
   isBootnode: false    # Besu only, set this to true if this node is a bootnode
   usesBootnodes: false # Besu only, set this to true if the network you are connecting to use a bootnode/s that are deployed in the cluster 
 
@@ -42,12 +42,7 @@ node:
       password: 'password'
   goquorum:
     metrics:
-      serviceMonitorEnabled: true
-    resources:
-      cpuLimit: 1
-      cpuRequest: 0.1
-      memLimit: "2G"
-      memRequest: "1G"
+      serviceMonitorEnabled: false
     account:
       password: 'password'
   tessera:
