@@ -52,3 +52,8 @@ node:
       password: 'password'
   tessera:
     password: 'password'
+  loadBalancer:
+    enabled: true
+    ip: "00.000.000.000/32" # TODO: Needs to be set
+    sourceRanges:
+      - "00.000.000.000/32" # TODO: Needs to be set

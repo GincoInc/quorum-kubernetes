@@ -13,7 +13,11 @@ metadata:
     app.kubernetes.io/managed-by: helm    
   namespace: {{ .Release.Namespace }}
 spec:
+{{- if .Values.node.loadBalancer.enabled }}
+  type: LoadBalancer
+{{- else }}
   type: ClusterIP
+{{- end }}
   selector:
     app.kubernetes.io/part-of: {{ include "goquorum-node.fullname" . }}
     app.kubernetes.io/namespace: {{ .Release.Namespace }}
@@ -43,6 +47,17 @@ spec:
       port: {{ .Values.node.goquorum.metrics.pprofport }}
       targetPort: metrics
       protocol: TCP
+{{- if .Values.node.loadBalancer.enabled }}
+  {{- if .Values.node.loadBalancer.ip }}
+  loadBalancerIP: {{ .Values.node.loadBalancer.ip }}
+  {{- end }}
+  {{- if .Values.node.loadBalancer.sourceRanges }}
+  loadBalancerSourceRanges:
+    {{- range .Values.node.loadBalancer.sourceRanges }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+{{- end }}
 
 {{- if .Values.quorumFlags.privacy }}
     - name: tessera

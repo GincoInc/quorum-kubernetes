@@ -41,3 +41,5 @@ node:
   goquorum:
     metrics:
       serviceMonitorEnabled: false
+  loadBalancer:
+    enabled: false

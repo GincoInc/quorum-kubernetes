@@ -52,4 +52,6 @@ node:
       memLimit: "2G"
       memRequest: "1G"
     password: 'password'
+  loadBalancer:
+    enabled: false
     
