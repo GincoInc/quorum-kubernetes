@@ -46,7 +46,7 @@
     "apiVersionRoleAssignments": "2018-09-01-preview",
     "apiVersionKeyVault": "2018-02-14",
     "apiVersionLogAnalytics": "2020-03-01-preview",
-    "kubernetesVersion": "1.24.0",
+    "kubernetesVersion": "1.22.11",
     "uniqueStr": "[toLower(substring(uniqueString(resourceGroup().id, deployment().name), 0, 8))]",
     "namePrefix": "[concat(parameters('bcClient'), '-', parameters('env'), '-', variables('uniqueStr') )]",
     "vnetName": "[concat(variables('namePrefix'), '-vnet')]",
@@ -59,11 +59,9 @@
     "clusterName": "[concat(variables('namePrefix'), '-cluster')]",
     "aksNodeResourceGroupName": "[concat('MC_', resourceGroup().name, '_', variables('clusterName'), '_', parameters('location'))]",
     "aksNodeResourceGroupId": "[concat(subscription().id, '/resourcegroups/', variables('aksNodeResourceGroupName'))]",
-    "aksNodeCount": 6,
-    "aksNodeVmSize": "Standard_D4as_v5",
-    "aksNodeDiskSizeGB": 100,
-    "keyVaultName": "[concat(variables('namePrefix'), '-vault')]",
-    "keyVaultRef": "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+    "aksNodeCount": 1,
+    "aksNodeVmSize": "Standard_D8a_v4",
+    "aksNodeDiskSizeGB": 200,
     "logsAnalyticsWorkspaceName": "[concat(variables('namePrefix'), '-logs')]",
     "actionGroup": "[concat(variables('namePrefix'), '-alerts')]",
     "alertsEmail": "",
@@ -164,62 +162,6 @@
             }
           }
         ]
-      }
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "[variables('apiVersionKeyVault')]",
-      "name": "[variables('keyVaultName')]",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('opsManagedIdentity'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnet1Name'))]"
-      ],
-      "properties": {
-        "enableSoftDelete": true,
-        "enabledForDeployment": true,
-        "enabledForDiskEncryption": false,
-        "enabledForTemplateDeployment": false,
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": [
-          {
-            "tenantId": "[reference(variables('opsManagedIdentity')).tenantId]",
-            "objectId": "[reference(variables('opsManagedIdentity')).principalId]",
-            "permissions": {
-              "keys": ["get"],
-              "secrets": ["get", "set"]
-            }
-          }
-        ],
-        "sku": {
-          "name": "premium",
-          "family": "A"
-        },
-        "networkAcls": {
-          "defaultAction": "Deny",
-          "bypass": "AzureServices",
-          "virtualNetworkRules": [
-            {
-              "id": "[variables('subnet1Ref')]"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults/providers/roleAssignments",
-      "apiVersion": "2018-09-01-preview",
-      "name": "[concat(variables('keyVaultName'),'/Microsoft.Authorization/', guid(resourceGroup().id, deployment().name, variables('opsManagedIdentity'), '-akv-reader-ra'))]",
-      "dependsOn": [
-        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
-        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('opsManagedIdentity'))]"
-      ],
-      "properties": {
-        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('readerRoleId'))]",
-        "principalId": "[reference(resourceID('Microsoft.ManagedIdentity/userAssignedIdentities/',variables('opsManagedIdentity')), '2018-11-30').principalId]",
-        "scope": "[variables('keyVaultRef')]",
-        "principalType": "ServicePrincipal"
       }
     },
     {
