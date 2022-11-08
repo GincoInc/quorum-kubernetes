@@ -43,11 +43,6 @@ node:
   goquorum:
     metrics:
       serviceMonitorEnabled: false
-    resources:
-      cpuLimit: 10
-      cpuRequest: 7.5
-      memLimit: "30G"
-      memRequest: "20G"
     account:
       password: 'password'
   tessera:

@@ -35,10 +35,10 @@ storage:
 node:
   goquorum:
     resources:
-      cpuLimit: 7.5
-      cpuRequest: 5
-      memLimit: "30G"
-      memRequest: "20G"
+      cpuLimit: 30
+      cpuRequest: 30
+      memLimit: "60Gi"
+      memRequest: "60Gi"
     # privKey:
     # pubKey:
     dataPath: "/data/quorum"
