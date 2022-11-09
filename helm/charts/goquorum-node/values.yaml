@@ -37,8 +37,8 @@ node:
     resources:
       cpuLimit: 30
       cpuRequest: 30
-      memLimit: "60Gi"
-      memRequest: "60Gi"
+      memLimit: "55Gi"
+      memRequest: "55Gi"
     # privKey:
     # pubKey:
     dataPath: "/data/quorum"
@@ -92,7 +92,7 @@ node:
     txpool:
       globalslots: 20000
       globalqueue: 20000
-    gcmode: "full"
+    gcmode: "archive"
 
   tessera:
     resources:
